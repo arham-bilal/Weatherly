@@ -708,18 +708,81 @@ let LOCALE = "en-US", LANG = "en";
   document.querySelectorAll("button").forEach(b => { if (b.textContent.trim() === "Ctrl K") b.remove(); });
   document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") e.stopImmediatePropagation(); }, true);
 
-  /* ---- Country : capital (the capital's weather is shown when you pick a country) ---- */
-  const DATA = "Afghanistan:Kabul;Albania:Tirana;Algeria:Algiers;Andorra:Andorra la Vella;Angola:Luanda;Antigua and Barbuda:Saint John's;Argentina:Buenos Aires;Armenia:Yerevan;Australia:Canberra;Austria:Vienna;Azerbaijan:Baku;" +
-    "Bahamas:Nassau;Bahrain:Manama;Bangladesh:Dhaka;Barbados:Bridgetown;Belarus:Minsk;Belgium:Brussels;Belize:Belmopan;Benin:Porto-Novo;Bhutan:Thimphu;Bolivia:La Paz;Bosnia and Herzegovina:Sarajevo;Botswana:Gaborone;Brazil:Brasilia;Brunei:Bandar Seri Begawan;Bulgaria:Sofia;Burkina Faso:Ouagadougou;Burundi:Gitega;" +
-    "Cabo Verde:Praia;Cambodia:Phnom Penh;Cameroon:Yaounde;Canada:Ottawa;Central African Republic:Bangui;Chad:N'Djamena;Chile:Santiago;China:Beijing;Colombia:Bogota;Comoros:Moroni;Congo:Brazzaville;Costa Rica:San Jose;Cote d'Ivoire:Yamoussoukro;Croatia:Zagreb;Cuba:Havana;Cyprus:Nicosia;Czechia:Prague;" +
-    "DR Congo:Kinshasa;Denmark:Copenhagen;Djibouti:Djibouti;Dominica:Roseau;Dominican Republic:Santo Domingo;Ecuador:Quito;Egypt:Cairo;El Salvador:San Salvador;Equatorial Guinea:Malabo;Eritrea:Asmara;Estonia:Tallinn;Eswatini:Mbabane;Ethiopia:Addis Ababa;Fiji:Suva;Finland:Helsinki;France:Paris;" +
-    "Gabon:Libreville;Gambia:Banjul;Georgia:Tbilisi;Germany:Berlin;Ghana:Accra;Greece:Athens;Grenada:Saint George's;Guatemala:Guatemala City;Guinea:Conakry;Guinea-Bissau:Bissau;Guyana:Georgetown;Haiti:Port-au-Prince;Honduras:Tegucigalpa;Hungary:Budapest;" +
-    "Iceland:Reykjavik;India:New Delhi;Indonesia:Jakarta;Iran:Tehran;Iraq:Baghdad;Ireland:Dublin;Israel:Jerusalem;Italy:Rome;Jamaica:Kingston;Japan:Tokyo;Jordan:Amman;Kazakhstan:Astana;Kenya:Nairobi;Kiribati:Tarawa;Kosovo:Pristina;Kuwait:Kuwait City;Kyrgyzstan:Bishkek;" +
-    "Laos:Vientiane;Latvia:Riga;Lebanon:Beirut;Lesotho:Maseru;Liberia:Monrovia;Libya:Tripoli;Liechtenstein:Vaduz;Lithuania:Vilnius;Luxembourg:Luxembourg;Madagascar:Antananarivo;Malawi:Lilongwe;Malaysia:Kuala Lumpur;Maldives:Male;Mali:Bamako;Malta:Valletta;Marshall Islands:Majuro;Mauritania:Nouakchott;Mauritius:Port Louis;Mexico:Mexico City;Micronesia:Palikir;Moldova:Chisinau;Monaco:Monaco;Mongolia:Ulaanbaatar;Montenegro:Podgorica;Morocco:Rabat;Mozambique:Maputo;Myanmar:Naypyidaw;" +
-    "Namibia:Windhoek;Nauru:Yaren;Nepal:Kathmandu;Netherlands:Amsterdam;New Zealand:Wellington;Nicaragua:Managua;Niger:Niamey;Nigeria:Abuja;North Korea:Pyongyang;North Macedonia:Skopje;Norway:Oslo;Oman:Muscat;Pakistan:Islamabad;Palau:Ngerulmud;Palestine:Ramallah;Panama:Panama City;Papua New Guinea:Port Moresby;Paraguay:Asuncion;Peru:Lima;Philippines:Manila;Poland:Warsaw;Portugal:Lisbon;Qatar:Doha;" +
-    "Romania:Bucharest;Russia:Moscow;Rwanda:Kigali;Saint Kitts and Nevis:Basseterre;Saint Lucia:Castries;Saint Vincent and the Grenadines:Kingstown;Samoa:Apia;San Marino:San Marino;Sao Tome and Principe:Sao Tome;Saudi Arabia:Riyadh;Senegal:Dakar;Serbia:Belgrade;Seychelles:Victoria;Sierra Leone:Freetown;Singapore:Singapore;Slovakia:Bratislava;Slovenia:Ljubljana;Solomon Islands:Honiara;Somalia:Mogadishu;South Africa:Pretoria;South Korea:Seoul;South Sudan:Juba;Spain:Madrid;Sri Lanka:Colombo;Sudan:Khartoum;Suriname:Paramaribo;Sweden:Stockholm;Switzerland:Bern;Syria:Damascus;" +
-    "Taiwan:Taipei;Tajikistan:Dushanbe;Tanzania:Dodoma;Thailand:Bangkok;Timor-Leste:Dili;Togo:Lome;Tonga:Nukualofa;Trinidad and Tobago:Port of Spain;Tunisia:Tunis;Turkey:Ankara;Turkmenistan:Ashgabat;Tuvalu:Funafuti;Uganda:Kampala;Ukraine:Kyiv;United Arab Emirates:Abu Dhabi;United Kingdom:London;United States:Washington DC;Uruguay:Montevideo;Uzbekistan:Tashkent;Vanuatu:Port Vila;Vatican City:Vatican City;Venezuela:Caracas;Vietnam:Hanoi;Yemen:Sanaa;Zambia:Lusaka;Zimbabwe:Harare";
-  const C = DATA.split(";").map(s => { const [n, c] = s.split(":"); return { n, c }; }).sort((a, b) => a.n.localeCompare(b.n, "en"));
+  /* ===== Complete A-Z Country List Modal Feature ===== */
+const COUNTRIES_LIST = [
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
+  "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
+  "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia",
+  "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+  "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+  "Fiji", "Finland", "France",
+  "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+  "Haiti", "Honduras", "Hungary",
+  "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy",
+  "Jamaica", "Japan", "Jordan",
+  "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan",
+  "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+  "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar",
+  "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway",
+  "Oman",
+  "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
+  "Qatar",
+  "Romania", "Russia", "Rwanda",
+  "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
+  "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+  "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+  "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+  "Yemen",
+  "Zambia", "Zimbabwe"
+];
+
+function openCp() {
+  let modal = $("#countryModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "countryModal";
+    modal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);";
+    modal.innerHTML = `
+      <div style="background:var(--bg, #1e1e1e);color:var(--text, #fff);padding:24px;border-radius:16px;width:90%;max-width:500px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="margin:0;font-size:1.2rem;">Select a Country (A-Z)</h3>
+          <button id="closeModal" style="background:none;border:none;color:inherit;font-size:1.5rem;cursor:pointer;">&times;</button>
+        </div>
+        <input type="text" id="countrySearchInput" placeholder="Search country..." style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:inherit;margin-bottom:12px;outline:none;">
+        <div id="countryListContainer" style="overflow-y:auto;flex-grow:1;display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:8px;padding-right:4px;"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector("#closeModal").onclick = () => modal.style.display = "none";
+    modal.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+
+    modal.querySelector("#countrySearchInput").oninput = e => {
+      const q = e.target.value.toLowerCase();
+      renderCountryGrid(q);
+    };
+  }
+
+  renderCountryGrid("");
+  modal.style.display = "flex";
+}
+
+function renderCountryGrid(filter) {
+  const container = $("#countryListContainer");
+  if (!container) return;
+  const filtered = COUNTRIES_LIST.filter(c => c.toLowerCase().includes(filter));
+  container.innerHTML = filtered.map(c => `
+    <button class="country-item-btn" style="padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:inherit;border-radius:8px;cursor:pointer;text-align:left;transition:all 0.2s;" data-country="${c}">${c}</button>
+  `).join("");
+
+  container.querySelectorAll(".country-item-btn").forEach(btn => {
+    btn.onclick = () => {
+      const countryName = btn.dataset.country;
+      $("#countryModal").style.display = "none";
+      load(countryName); // Yeh function us country ka weather load kar dega
+    };
+  });
+}
 
   /* ---- Panel ---- */
   const cp = document.createElement("div"); cp.id = "cp"; cp.hidden = true;
