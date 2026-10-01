@@ -8,14 +8,12 @@ API_KEY = os.environ.get('WEATHER_API_KEY')
 
 @app.route('/api/weather', methods=['GET'])
 def get_weather():
-    city = request.args.get('city')
-    if not city:
-        return jsonify({'error': 'City is required'}), 400
-    
+    city = request.args.get('city', 'Karachi')
     if not API_KEY:
         return jsonify({'error': 'API key not configured on server'}), 500
 
-    url = f"http://api.weatherapi.com/v1/current.json?key={API_KEY}&q={city}"
+    # WeatherAPI forecast endpoint use karte hain taake current + forecast dono data mil jaye
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={API_KEY}&q={city}&days=7"
     
     try:
         response = requests.get(url)
