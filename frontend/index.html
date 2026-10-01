@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weatherly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="clear">
+<div id="scene" aria-hidden="true">
+  <div class="sky"></div>
+  <div class="sun"><i class="rays"></i></div>
+  <div class="moon"></div>
+  <div id="stars"></div>
+  <div id="clouds"></div>
+  <div id="rain"></div>
+  <div id="snow"></div>
+  <div class="flash"></div>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="cfx0" x="-60%" y="-120%" width="220%" height="340%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="110" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="1.5"/></filter>
+  <filter id="cfx1" x="-60%" y="-120%" width="220%" height="340%"><feTurbulence type="fractalNoise" baseFrequency="0.010" numOctaves="4" seed="8" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="130" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="1.5"/></filter>
+  <filter id="cfx2" x="-60%" y="-120%" width="220%" height="340%"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="14" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="100" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="1.5"/></filter>
+</defs></svg>
+
+<div id="loader"><div class="spinner"></div><p>Fetching latest weather...</p></div>
+
+<main class="wrap">
+  <header class="top">
+    <div class="brand">Weatherly</div>
+    <form id="search" autocomplete="off">
+      <input id="q" type="search" placeholder="Search a city, e.g. Lahore" aria-label="Search city" maxlength="80">
+      <button type="submit" aria-label="Search">Search</button>
+    </form>
+  </header>
+
+  <div id="error" role="alert" hidden></div>
+
+  <div id="app" hidden>
+    <section class="hero glass">
+      <div class="hero-main">
+        <h1 id="place"></h1>
+        <p class="clock"><span id="day"></span> · <span id="date"></span> · <span id="time"></span></p>
+        <div class="temp"><span id="temp">--</span><sup>°C</sup></div>
+        <div class="cond"><img id="cicon" alt=""><span id="cond"></span></div>
+        <p class="feels">Feels like <b id="feels"></b></p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 id="hourTitle">Next 24 hours</h2><button id="resetDay" class="chip" hidden>Back to next 24 hours</button></div>
+      <div class="hourly" id="hourly"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>7-day forecast</h2><span class="hint">Select a day to see its hours</span></div>
+      <div class="daily" id="daily"></div>
+    </section>
+
+    <section>
+      <h2>Trends</h2>
+      <div class="charts">
+        <div class="glass chart"><h3>Temperature (°C)</h3><div class="cv"><canvas id="cTemp"></canvas></div></div>
+        <div class="glass chart"><h3>Rain probability (%)</h3><div class="cv"><canvas id="cRain"></canvas></div></div>
+        <div class="glass chart"><h3>Humidity (%)</h3><div class="cv"><canvas id="cHum"></canvas></div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sun and moon</h2>
+      <div class="extra glass" id="extra"></div>
+    </section>
+    <footer>Data from WeatherAPI.com · <span id="updated"></span></footer>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
