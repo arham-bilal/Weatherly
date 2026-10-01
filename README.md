@@ -1,5 +1,6 @@
-# Weatherly – live weather dashboard (Flask + vanilla JS)
 
+# Weatherly – live weather dashboard (Flask + vanilla JS)
+🔗 **Live Demo:** [https://weatherly-three-ashy.vercel.app/](https://weatherly-three-ashy.vercel.app/)
 Default location: **Karachi, Sindh, Pakistan**. All data is fetched live from WeatherAPI.com by the Python backend; the API key never reaches the browser.
 
 ## 1. Install dependencies
