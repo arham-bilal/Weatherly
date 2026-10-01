@@ -800,17 +800,7 @@ function renderCountryGrid(filter) {
     $("#cpl").innerHTML = html || '<p class="cmsg">No country found.</p>';
     $("#cpr").innerHTML = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(L => `<a data-l="${L}" class="${letters.includes(L) ? "on" : ""}">${L}</a>`).join("");
   }
-  const openCp = () => { cp.hidden = false; $("#cpq").value = ""; draw(); $("#cpl").scrollTop = 0; $("#cpq").focus(); };
-  const closeCp = () => { cp.hidden = true; };
 
-  $("#cpq").addEventListener("input", draw);
-  $("#cpx").addEventListener("click", closeCp);
-  cp.addEventListener("mousedown", e => { if (e.target === cp) closeCp(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && !cp.hidden) closeCp(); });
-  $("#cpr").addEventListener("click", e => {
-    const a = e.target.closest("a.on"); if (!a) return;
-    const h = document.getElementById("cpL" + a.dataset.l); if (h) $("#cpl").scrollTo({ top: h.offsetTop - $("#cpl").offsetTop, behavior: "smooth" });
-  });
   $("#cpl").addEventListener("click", e => {
     const b = e.target.closest(".cpi"); if (!b) return;
     const x = C[+b.dataset.i]; closeCp(); load(`${x.c}, ${x.n}`); window.scrollTo({ top: 0, behavior: "smooth" });
