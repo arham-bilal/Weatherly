@@ -4,7 +4,6 @@ import requests
 
 app = Flask(__name__)
 
-# Direct environment variable catch karega
 API_KEY = os.environ.get('WEATHER_API_KEY')
 
 @app.route('/api/weather', methods=['GET'])
@@ -28,6 +27,5 @@ def get_weather():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Vercel serverless entry point
 if __name__ == '__main__':
     app.run()
