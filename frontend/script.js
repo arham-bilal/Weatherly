@@ -811,3 +811,78 @@ function renderCountryGrid(filter) {
   btn.addEventListener("click", openCp);
   ($(".tools") || $(".top")).appendChild(btn);
 })();
+
+/* ===== Speed pack: faster responses + smoother animation (paste at the very bottom) ===== */
+(function () {
+  if (window.__speed) return; window.__speed = true;
+
+  /* ---- 0. Firefox and Safari are slow with SVG filters, so they get a lighter cloud ---- */
+  if (!/Chrome|Chromium|Edg\//.test(navigator.userAgent)) document.body.classList.add("soft-clouds");
+
+  /* ---- 1. Mouse effects: at most ~30 updates per second ---- */
+  let lastMove = 0;
+  document.addEventListener("pointermove", e => {
+    const t = performance.now();
+    if (t - lastMove < 32) e.stopImmediatePropagation(); else lastMove = t;
+  }, true);
+
+  /* ---- 2. Remember answers for 5 minutes (instant when you open a city again) ---- */
+  const store = new Map(), pending = new Set(), TTL = 5 * 60 * 1000, _f = window.fetch.bind(window);
+  const lang = () => (typeof LANG !== "undefined" ? LANG : "en");
+  window.fetch = (u, o) => {
+    if (typeof u !== "string" || !/\/api\/(weather|cities|suggest)/.test(u) || (o && o.method && o.method !== "GET")) return _f(u, o);
+    const k = u + "|" + lang(), hit = store.get(k);
+    if (hit && Date.now() - hit.t < TTL) return Promise.resolve(new Response(hit.body, { status: 200, headers: { "Content-Type": "application/json" } }));
+    return _f(u, o).then(r => {
+      if (r.ok) r.clone().text().then(body => { store.set(k, { t: Date.now(), body }); if (store.size > 80) store.delete(store.keys().next().value); });
+      return r;
+    });
+  };
+
+  /* ---- 3. Start loading a city when the mouse reaches its card (click feels instant) ---- */
+  document.addEventListener("pointerover", e => {
+    const c = e.target.closest && e.target.closest(".city"); if (!c || !c.dataset.q) return;
+    const u = `${API}/api/weather?city=${encodeURIComponent(decodeURIComponent(c.dataset.q))}`, k = u + "|" + lang();
+    if (store.has(k) || pending.has(k)) return;
+    pending.add(k); fetch(u).catch(() => {}).finally(() => pending.delete(k));
+  });
+
+  /* ---- 4. Lite mode: turns the heaviest effects off (switches on by itself on slow screens) ---- */
+  const btn = document.createElement("button"); btn.type = "button"; btn.className = "chip ghost";
+  ($(".tools") || $(".top")).appendChild(btn);
+  let manual = null; try { manual = localStorage.getItem("wx_lite"); } catch (e) {}
+  function setLite(on, save) {
+    document.body.classList.toggle("lite", on); btn.textContent = on ? "Lite: on" : "Lite: off";
+    if (save) { try { localStorage.setItem("wx_lite", on ? "1" : "0"); } catch (e) {} }
+  }
+  btn.addEventListener("click", () => setLite(!document.body.classList.contains("lite"), true));
+  setLite(manual === "1", false);
+  if (manual === null) setTimeout(() => {
+    if (document.hidden) return;
+    let n = 0, t0 = 0;
+    const tick = t => {
+      if (!t0) t0 = t; n++;
+      if (t - t0 < 2500) requestAnimationFrame(tick);
+      else if (!document.hidden && n / ((t - t0) / 1000) < 40) setLite(true, false);
+    };
+    requestAnimationFrame(tick);
+  }, 3500);
+
+  /* ---- 5. Faster search: no artificial waiting after the data arrives ---- */
+  load = async function (city) {
+    const L = $("#loader"); L.classList.remove("off"); $("#error").hidden = true;
+    try {
+      const res = await fetch(`${API}/api/weather?city=${encodeURIComponent(city)}`);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(res.status === 404 ? "Location not found." : "fail");
+      $("#app").hidden = false; render(body);
+    } catch (e) {
+      const box = $("#error"); box.hidden = false;
+      box.textContent = e.message === "Location not found." ? e.message : "Unable to fetch weather data. Please try again.";
+      box.style.animation = "none"; void box.offsetWidth; box.style.animation = "";
+    } finally { L.classList.add("off"); }
+  };
+
+  /* ---- 6. Show the page sooner ---- */
+  const sp = $("#splash"); if (sp) setTimeout(() => sp.classList.add("off"), 700);
+})();

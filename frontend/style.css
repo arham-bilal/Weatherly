@@ -283,3 +283,38 @@ body.dark #scene::after{opacity:1}
 #cpr a{color:var(--soft);opacity:.3;text-align:center}
 #cpr a.on{opacity:1;color:var(--ink);cursor:pointer}
 #cpr a.on:hover{color:var(--accent)}
+/* ===== Speed pack: lighter effects, same look ===== */
+.glass{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hcard,.dcard,.chip.ghost,#search,#sugg{backdrop-filter:none;-webkit-backdrop-filter:none}
+.aurora i{width:42vmax;height:42vmax;filter:none;will-change:auto;opacity:.45}
+.aurora i:nth-child(1){background:radial-gradient(circle,var(--accent),transparent 68%)}
+.aurora i:nth-child(2){background:radial-gradient(circle,#5aa9ff,transparent 68%)}
+.aurora i:nth-child(3){background:radial-gradient(circle,#c58bff,transparent 68%)}
+#spot{display:none}
+.cloud:nth-child(n+4){display:none}
+.drop:nth-child(n+61){display:none}
+.flake:nth-child(n+36){display:none}
+.flake{box-shadow:none}
+.star:nth-child(n+51){display:none}
+body:not([data-night=true]) .star{animation:none}
+.hero::before{animation:none}
+.sun::before{display:none}
+#app.swap{animation:swap2 .45s ease-out}
+@keyframes swap2{from{opacity:0;transform:translateY(10px)}}
+#loader{backdrop-filter:none;-webkit-backdrop-filter:none;transition:opacity .2s,visibility .2s}
+#cp,#pal{backdrop-filter:none;background:rgba(10,20,40,.62)}
+.cbox,#pal .box{backdrop-filter:blur(12px)}
+.reveal{transition:opacity .5s,translate .5s}
+body.soft-clouds .cloud{filter:blur(1.5px)!important}
+
+/* Lite mode (button at the top, or automatic on slow screens) */
+body.lite .aurora,body.lite .rays,body.lite .star,body.lite .hero::before,body.lite #spot{display:none}
+body.lite *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.lite .cloud{filter:none!important}
+body.lite .cloud:nth-child(n+3){display:none}
+body.lite .drop:nth-child(n+36){display:none}
+body.lite .flake:nth-child(n+21){display:none}
+body.lite .sun{animation:none}
+body.lite #app.swap{animation:none}
+body.lite .reveal{opacity:1;translate:none;transition:none}
+body.lite .tilting{transform:none!important}
