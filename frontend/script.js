@@ -420,9 +420,58 @@ let LOCALE = "en-US", LANG = "en";
     ["Air quality data is not available for this location.", "No hay datos de calidad del aire para este lugar.", "Données de qualité de l'air indisponibles pour ce lieu.", "بيانات جودة الهواء غير متاحة لهذا الموقع.", "اس مقام کے لیے ہوا کے معیار کا ڈیٹا دستیاب نہیں۔"],
     ["EPA index", "Índice EPA", "Indice EPA", "مؤشر EPA", "EPA انڈیکس"],
     ["Location not found.", "Ubicación no encontrada.", "Lieu introuvable.", "الموقع غير موجود.", "مقام نہیں ملا۔"],
-    ["Unable to fetch weather data. Please try again.", "No se pudo obtener el clima. Inténtalo de nuevo.", "Impossible de récupérer la météo. Veuillez réessayer.", "تعذّر جلب بيانات الطقس. يرجى المحاولة مرة أخرى.", "موسم کا ڈیٹا حاصل نہیں ہو سکا۔ دوبارہ کوشش کریں۔"]
+    ["Save card", "Guardar tarjeta", "Enregistrer la carte", "حفظ البطاقة", "کارڈ محفوظ کریں"],
+    ["Speak", "Hablar", "Parler", "تحدث", "بولیں"],
+    ["Voice", "Voz", "Voix", "الصوت", "آواز"],
+    ["All countries", "Todos los países", "Tous les pays", "كل البلدان", "تمام ممالک"],
+    ["Lite: off", "Modo ligero: desactivado", "Mode léger : désactivé", "الوضع الخفيف: متوقف", "لائٹ موڈ: بند"],
+    ["Lite: on", "Modo ligero: activado", "Mode léger : activé", "الوضع الخفيف: يعمل", "لائٹ موڈ: چالو"],
+    ["Clear", "Despejado", "Dégagé", "صاف", "صاف"],
+    ["Save card", "Guardar tarjeta", "Enregistrer la carte", "حفظ البطاقة", "کارڈ محفوظ کریں"],
+    ["Speak", "Hablar", "Parler", "تحدث", "بولیں"],
+    ["Voice", "Voz", "Voix", "الصوت", "آواز"],
+    ["All countries", "Todos los países", "Tous les pays", "كل البلدان", "تمام ممالک"],
+    ["Lite: off", "Modo ligero: desactivado", "Mode léger : désactivé", "الوضع الخفيف: متوقف", "لائٹ موڈ: بند"],
+    ["Clear", "Despejado", "Dégagé", "صاف", "صاف"],
+    ["Partly cloudy", "Parcialmente nublado", "Partiellement nuageux", "غائم جزئيًا", "جزوی ابر آلود"],
+    ["Cloudy", "Nublado", "Nuageux", "غائم", "ابر آلود"],
+    ["Overcast", "Cubierto", "Couvert", "غائم كليًا", "مکمل ابر آلود"],
+    ["Sunny", "Soleado", "Ensoleillé", "مشمس", "دھوپ"],
+    ["Rain", "Lluvia", "Pluie", "مطر", "بارش"],
+    ["Light rain", "Lluvia ligera", "Pluie légère", "مطر خفيف", "ہلکی بارش"],
+    ["Patchy rain possible", "Posibilidad de lluvia dispersa", "Pluie éparse possible", "احتمال هطول أمطار متفرقة", "کہیں کہیں بارش کا امکان"],
+    ["Unable to fetch weather data. Please try again.", "No se pudo obtener el clima. Inténtalo de nuevo.", "Impossible de récupérer la météo. Veuillez réessayer.", "تعذّر جلب بيانات الطقس. يرجى المحاولة مرة أخرى.", "موسم کا ڈیٹا حاصل نہیں ہو سکا۔ دوبارہ کوشش کریں۔"],
+    ["# km/h", "# km/h", "# km/h", "# كم/س", "# کلومیٹر/گھنٹہ"],
+    ["# km", "# km", "# km", "# كم", "# کلومیٹر"],
+    ["# mb", "# mb", "# mb", "# ملي بار", "# ملی بار"],
+    ["N", "N", "N", "شمال", "شمال"],
+    ["NE", "NE", "NE", "شمال شرق", "شمال مشرق"],
+    ["E", "E", "E", "شرق", "مشرق"],
+    ["SE", "SE", "SE", "جنوب شرق", "جنوب مشرق"],
+    ["S", "S", "S", "جنوب", "جنوب"],
+    ["SW", "SO", "SO", "جنوب غرب", "جنوب مغرب"],
+    ["W", "O", "O", "غرب", "مغرب"],
+    ["NW", "NO", "NO", "شمال غرب", "شمال مغرب"],
+    ["Day at a glance", "El día de un vistazo", "Aperçu de la journée", "اليوم في لمحة", "ایک نظر میں دن"],
+    ["Move over the bar", "Mueve el cursor sobre la barra", "Passez la souris sur la barre", "مرّر المؤشر على الشريط", "بار پر ماؤس پھیریں"],
+    ["Low # · High #", "Mín # · Máx #", "Min # · Max #", "الأدنى # · الأعلى #", "کم از کم # · زیادہ سے زیادہ #"],
+    ["Compare cities", "Comparar ciudades", "Comparer des villes", "مقارنة المدن", "شہروں کا موازنہ"],
+    ["Type a city and press Enter", "Escribe una ciudad y pulsa Enter", "Saisissez une ville et appuyez sur Entrée", "اكتب مدينة واضغط Enter", "شہر لکھیں اور Enter دبائیں"],
+    ["Compare with... e.g. London", "Comparar con... p. ej. Londres", "Comparer avec... ex. Londres", "قارن مع... مثل لندن", "موازنہ کریں... مثلاً لندن"],
+    ["Temperature", "Temperatura", "Température", "درجة الحرارة", "درجہ حرارت"],
+    ["PM2.5 air pollution", "Contaminación PM2.5", "Pollution PM2.5", "تلوث الهواء PM2.5", "PM2.5 فضائی آلودگی"],
+    ["Loading...", "Cargando...", "Chargement...", "جارٍ التحميل...", "لوڈ ہو رہا ہے..."],
+    ["Select a Country (A-Z)", "Elige un país (A-Z)", "Choisir un pays (A-Z)", "اختر دولة (أ-ي)", "ملک منتخب کریں (A-Z)"],
+    ["Search country...", "Buscar país...", "Rechercher un pays...", "ابحث عن دولة...", "ملک تلاش کریں..."],
+    ["#, #, #", "#, #, #", "#, #, #", "#, #, #", "#, #, #"],
+    ["#, #", "#, #", "#, #", "#, #", "#, #"],
+    ["Karachi", "Karachi", "Karachi", "كراتشي", "کراچی"],
+    ["Lahore", "Lahore", "Lahore", "لاهور", "لاہور"],
+    ["Islamabad", "Islamabad", "Islamabad", "إسلام آباد", "اسلام آباد"],
+    ["Sindh", "Sindh", "Sindh", "السند", "سندھ"],
+    ["Punjab", "Punyab", "Pendjab", "البنجاب", "پنجاب"],
+    ["Pakistan", "Pakistán", "Pakistan", "باكستان", "پاکستان"]
   ];
-
   /* ---- Dictionary per language: exact strings and "#" templates ---- */
   const cache = {};
   const rx = k => new RegExp("^" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/#/g, "(.+?)") + "$");
@@ -886,3 +935,12 @@ function renderCountryGrid(filter) {
   /* ---- 6. Show the page sooner ---- */
   const sp = $("#splash"); if (sp) setTimeout(() => sp.classList.add("off"), 700);
 })();
+/* ===== Re-translate after all buttons exist ===== */
+setTimeout(() => {
+  const s = document.getElementById("lang");
+  if (s) s.dispatchEvent(new Event("change"));
+}, 1500);
+setTimeout(() => {
+  const s = document.getElementById("lang");
+  if (s) s.dispatchEvent(new Event("change"));
+}, 2000);

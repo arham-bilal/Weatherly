@@ -6,23 +6,38 @@ app = Flask(__name__)
 
 API_KEY = os.environ.get('WEATHER_API_KEY')
 
-def get_theme(condition_text, is_day):
-    txt = condition_text.lower()
-    if 'rain' in txt or 'drizzle' in txt or 'thunder' in txt:
-        return 'rain'
-    if 'snow' in txt or 'sleet' in txt or 'blizzard' in txt:
+# Languages the frontend can request for translated condition text
+# (WeatherAPI.com translates its condition strings natively).
+SUPPORTED_LANGS = ('en', 'es', 'fr', 'ar', 'ur')
+
+# WeatherAPI condition codes grouped into visual themes.
+# Codes are language-independent, so the theme stays correct even when
+# the condition text comes back translated (e.g. "Despejado" for Clear).
+_SNOW = {1066, 1114, 1117, 1204, 1207, 1210, 1213, 1216, 1219, 1222, 1225, 1237,
+         1249, 1252, 1255, 1258, 1261, 1264, 1279, 1282}
+_RAIN = {1063, 1069, 1072, 1087, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189,
+         1192, 1195, 1198, 1201, 1240, 1243, 1246, 1273, 1276}
+_CLOUDY = {1003, 1006, 1009, 1030, 1135, 1147}
+
+def get_theme(condition_code):
+    if condition_code in _SNOW:
         return 'snow'
-    if 'cloud' in txt or 'overcast' in txt or 'mist' in txt or 'fog' in txt:
+    if condition_code in _RAIN:
+        return 'rain'
+    if condition_code in _CLOUDY:
         return 'cloudy'
-    return 'clear'
+    return 'clear'  # 1000 (Sunny/Clear) and anything unknown
 
 @app.route('/api/weather', methods=['GET'])
 def get_weather():
     city = request.args.get('city', 'Karachi')
+    lang = request.args.get('lang', 'en')
+    if lang not in SUPPORTED_LANGS:
+        lang = 'en'
     if not API_KEY:
         return jsonify({'error': 'API key not configured on server'}), 500
 
-    url = f"http://api.weatherapi.com/v1/forecast.json?key={API_KEY}&q={city}&days=7&aqi=yes"
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={API_KEY}&q={city}&days=7&aqi=yes&lang={lang}"
     
     try:
         response = requests.get(url)
@@ -37,7 +52,7 @@ def get_weather():
 
         cond = cur.get('condition', {})
         is_day = cur.get('is_day', 1)
-        theme = get_theme(cond.get('text', ''), is_day)
+        theme = get_theme(cond.get('code'))
 
         # Air quality mapping
         aqi_data = cur.get('air_quality', {})
